@@ -6,33 +6,9 @@ import Tickets from './pages/Tickets';
 import Completed from './pages/Completed';
 import AddTask from './pages/AddTask';
 import LargeTask from './pages/LargeTask';
-import { supabase } from './utils/supabase';
 
 export default function App() {
   const Drawer = createDrawerNavigator();
-
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    const getTodos = async () => {
-      try {
-        const { data: todos, error } = await supabase.from('todos').select();
-
-        if (error) {
-          console.error('Error fetching todos:', error.message);
-          return;
-        }
-
-        if (todos && todos.length > 0) {
-          setTodos(todos);
-        }
-      } catch (error) {
-        console.error('Error fetching todos:', error.message);
-      }
-    };
-
-    getTodos();
-  }, []);
 
   return (
     <NavigationContainer>

@@ -18,7 +18,18 @@ export default function SmallTicket({ item, navigation }) {
       style={styles.item}
     >
       <Text style={styles.itemTitle}>{item.title}</Text>
-      <Checkbox.Android status={item.complete ? 'checked' : 'unchecked'} />
+      <Text
+        style={{
+          color:
+            item.status === 'new'
+              ? 'green'
+              : item.status === 'in progress'
+              ? 'gold'
+              : 'red',
+        }}
+      >
+        {item.status}
+      </Text>
     </Pressable>
   );
 }
@@ -41,6 +52,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     alignSelf: 'center',
     paddingLeft: 5,
+    paddingRight: 5,
+    height: 50,
+    backgroundColor: '#999',
   },
   itemTitle: {
     width: '50%',
