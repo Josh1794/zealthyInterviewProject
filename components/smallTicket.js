@@ -1,19 +1,11 @@
 import { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  SafeAreaView,
-  Pressable,
-} from 'react-native';
-import { Checkbox } from 'react-native-paper';
+import { StyleSheet, Text, Pressable } from 'react-native';
 
 export default function SmallTicket({ item, navigation }) {
   return (
     <Pressable
       onPress={() => {
-        navigation.navigate('LargeTask', { id: item.id });
+        navigation.navigate('LargeTicket', { id: item.id });
       }}
       style={styles.item}
     >
