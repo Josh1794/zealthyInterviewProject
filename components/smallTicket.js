@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, Pressable } from 'react-native';
+import { StyleSheet, Text, Pressable, View } from 'react-native';
 
 export default function SmallTicket({ item, navigation }) {
   return (
@@ -9,15 +9,21 @@ export default function SmallTicket({ item, navigation }) {
       }}
       style={styles.item}
     >
-      <Text style={styles.itemTitle}>{item.title}</Text>
+      <View style={styles.itemLeftContent}>
+        <Text style={styles.itemTitle}>{item.title}</Text>
+        <Text style={styles.itemDescription}>
+          Description: {item.description}
+        </Text>
+      </View>
+      <Text> Status: </Text>
       <Text
         style={{
           color:
             item.status === 'new'
-              ? 'green'
+              ? 'red'
               : item.status === 'in progress'
-              ? 'gold'
-              : 'red',
+              ? 'goldenrod'
+              : '#00531B',
         }}
       >
         {item.status}
@@ -45,11 +51,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 5,
     paddingRight: 5,
-    height: 50,
-    backgroundColor: '#999',
+    paddingVertical: 10,
+    height: 70,
+    backgroundColor: 'white',
+    borderColor: '#999',
   },
+  itemLeftContent: { width: '65%' },
   itemTitle: {
-    width: '50%',
-    overflow: 'hidden',
+    fontWeight: 'bold',
   },
+  itemDescription: { overflow: 'hidden' },
 });

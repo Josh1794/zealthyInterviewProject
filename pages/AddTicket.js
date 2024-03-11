@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, TextInput, Text } from 'react-native-paper';
 import { supabase } from '../utils/supabase';
 import { useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
@@ -52,11 +52,14 @@ export default function AddTicket({ navigation }) {
     ),
     headerTitle: 'Add Ticket',
   });
-  console.log(newTicket);
+
   return (
     <View>
       <TextInput
+        underlineColor='#00531B'
+        activeUnderlineColor='#00531B'
         style={styles.textInput}
+        contentStyle={styles.textInputContent}
         placeholder='Title'
         label='Title'
         onChangeText={(text) =>
@@ -69,7 +72,10 @@ export default function AddTicket({ navigation }) {
       />
       <TextInput
         multiline
+        underlineColor='#00531B'
+        activeUnderlineColor='#00531B'
         style={styles.textInput}
+        contentStyle={styles.textInputContent}
         placeholder='Description'
         label='Description'
         onChangeText={(text) =>
@@ -81,7 +87,11 @@ export default function AddTicket({ navigation }) {
         }
       />
       {/* Without Backend storage available for free I am currently only displaying a native file picker but not sending it to the backend  */}
-      <Button onPress={() => DocumentPicker.getDocumentAsync()}>
+      <Button
+        style={styles.uploadButton}
+        textColor='#00531B'
+        onPress={() => DocumentPicker.getDocumentAsync()}
+      >
         Upload File
       </Button>
       <Button
@@ -99,8 +109,16 @@ const styles = StyleSheet.create({
   textInput: {
     margin: 10,
   },
+  textInputContent: {
+    backgroundColor: '#e8e8e8',
+  },
+  uploadButton: {
+    margin: 5,
+  },
   submitButton: {
     width: 200,
     marginLeft: 5,
+    marginTop: 20,
+    backgroundColor: '#00531B',
   },
 });

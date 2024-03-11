@@ -1,4 +1,4 @@
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Image } from 'react-native';
 import {
   ActivityIndicator,
   Modal,
@@ -16,6 +16,15 @@ export default function LargeTicket({ route, navigation }) {
   const [ticket, setTicket] = useState();
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [editedTicket, setEditedTicket] = useState();
+
+  useEffect(() => {
+    setEditedTicket({
+      title: ticket && ticket.title,
+      description: ticket && ticket.description,
+      status: ticket && ticket.status,
+    });
+  }, [ticket]);
 
   useEffect(() => {
     setLoading(true);
@@ -58,6 +67,7 @@ export default function LargeTicket({ route, navigation }) {
     ),
     headerRight: () => (
       <Button
+        textColor='black'
         icon='pencil'
         onPress={() => {
           setEditMode(true);
@@ -66,27 +76,69 @@ export default function LargeTicket({ route, navigation }) {
         Edit
       </Button>
     ),
-    headerTitle: () => <Text variant='headlineSmall'>Ticket</Text>,
+    headerTitle: 'Ticket',
   });
 
   return (
     <PaperProvider>
       <SafeAreaView>
-        {loading ? (
-          <ActivityIndicator />
-        ) : (
-          <View>
-            <Text>{ticket && ticket.title}</Text>
-            <Text>{ticket && ticket.description}</Text>
-            <Text>{ticket && ticket.status}</Text>
-          </View>
+        <View style={styles.content}>
+          {loading ? (
+            <ActivityIndicator color='#00531B' />
+          ) : (
+            <>
+              <View style={styles.contentHeader}>
+                <Text style={styles.title}>
+                  Title: {ticket && ticket.title}
+                </Text>
+                <Text style={styles.status}>
+                  Status: {ticket && ticket.status}
+                </Text>
+              </View>
+              <Text style={styles.description}>
+                Description: {ticket && ticket.description}
+              </Text>
+              <Text>User: {ticket && ticket.createdBy}</Text>
+              <Text>
+                If backend storage was paid for I would display photo here
+              </Text>
+              <Image
+                style={{ alignSelf: 'center', marginTop: 10 }}
+                source={require('../assets/R.732bb9a21aa32bacc9daeae6fca08f94.png')}
+              />
+            </>
+          )}
+        </View>
+        {ticket && (
+          <EditTaskModal
+            editMode={editMode}
+            setEditMode={setEditMode}
+            ticket={ticket}
+            editedTicket={editedTicket}
+            setEditedTicket={setEditedTicket}
+          />
         )}
-        <EditTaskModal
-          editMode={editMode}
-          setEditMode={setEditMode}
-          ticket={ticket}
-        />
       </SafeAreaView>
     </PaperProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    padding: 10,
+  },
+  contentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 20,
+  },
+  description: {
+    fontSize: 16,
+  },
+  status: {
+    fontSize: 20,
+  },
+});

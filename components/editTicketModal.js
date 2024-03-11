@@ -4,14 +4,17 @@ import { supabase } from '../utils/supabase';
 import { useEffect, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 
-export default function EditTaskModal({ editMode, setEditMode, ticket }) {
-  const [editedTicket, setEditedTicket] = useState({
-    title: ticket.title,
-    description: ticket.description,
-    status: ticket.status,
-  });
-  console.log(editedTicket);
+export default function EditTaskModal({
+  editMode,
+  setEditMode,
+  ticket,
+  editedTicket,
+  setEditedTicket,
+}) {
   const editTicket = async (id) => {
+    if (editedTicket.status === 'resolved') {
+      console.log('Would Normally send email here with body...');
+    }
     try {
       const { data: ticket, error } = await supabase
         .from('tickets')
@@ -25,7 +28,6 @@ export default function EditTaskModal({ editMode, setEditMode, ticket }) {
       }
 
       if (ticket && ticket.length > 0) {
-        console.log('Hello', ticket);
         setEditedTicket({
           title: ticket.title,
           description: ticket.description,
@@ -38,6 +40,8 @@ export default function EditTaskModal({ editMode, setEditMode, ticket }) {
     }
   };
 
+  // Would be modified depending on user permissions to add or remove certain editing fields such as status and overriding who completed a task
+
   return (
     <Portal>
       <Modal
@@ -47,8 +51,11 @@ export default function EditTaskModal({ editMode, setEditMode, ticket }) {
       >
         <Text>Edit Ticket</Text>
         <TextInput
-          defaultValue={ticket.title}
+          defaultValue={ticket && ticket.title}
+          underlineColor='#00531B'
+          activeUnderlineColor='#00531B'
           style={styles.textInput}
+          contentStyle={styles.textInputContent}
           onChangeText={(text) =>
             setEditedTicket({
               title: text,
@@ -59,8 +66,11 @@ export default function EditTaskModal({ editMode, setEditMode, ticket }) {
         />
         <TextInput
           multiline
-          defaultValue={ticket.description}
+          defaultValue={ticket && ticket.description}
+          underlineColor='#00531B'
+          activeUnderlineColor='#00531B'
           style={styles.textInput}
+          contentStyle={styles.textInputContent}
           onChangeText={(text) =>
             setEditedTicket({
               title: editedTicket.title,
@@ -84,7 +94,13 @@ export default function EditTaskModal({ editMode, setEditMode, ticket }) {
           <Picker.Item label='In Progress' value={'in progress'} />
           <Picker.Item label='Resolved' value={'resolved'} />
         </Picker>
-        <Button onPress={() => editTicket(ticket.id)}>Submit</Button>
+        <Button
+          mode='contained'
+          onPress={() => editTicket(ticket.id)}
+          style={styles.submitButton}
+        >
+          Submit
+        </Button>
       </Modal>
     </Portal>
   );
@@ -99,8 +115,18 @@ const styles = StyleSheet.create({
   textInput: {
     margin: 10,
   },
+
+  textInput: {
+    margin: 10,
+  },
+  textInputContent: {
+    backgroundColor: '#e8e8e8',
+  },
+  uploadButton: {
+    margin: 5,
+  },
   submitButton: {
-    width: 200,
-    marginLeft: 5,
+    marginTop: 20,
+    backgroundColor: '#00531B',
   },
 });
